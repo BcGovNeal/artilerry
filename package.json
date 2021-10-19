@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "artillery": "^1.7.9"
+  },
+  "name": "artillery",
+  "description": "",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "artillery run sample-config.yaml --output report.json",
+    "report": "artillery report --output report.html report.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BcGovNeal/artillery.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BcGovNeal/artillery/issues"
+  },
+  "homepage": "https://github.com/BcGovNeal/artillery#readme"
+}

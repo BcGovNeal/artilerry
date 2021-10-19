@@ -1,0 +1,24 @@
+config:
+  target: "{{ $processEnvironment.API_URL }}"
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: Warm up
+    - duration: "{{ $processEnvironment.RAMP_UP_DURATION }}"
+      arrivalRate: "{{ $processEnvironment.RAMP_UP_RATE }}"
+      rampTo: "{{ $processEnvironment.RAMP_UP_MAX }}"
+      name: Ramp up load
+    - duration: "{{ $processEnvironment.SUSTAINED_DURATION }}"
+      arrivalRate: "{{ $processEnvironment.SUSTAINED_RATE }}"
+      name: Sustained load
+
+scenarios:
+  - name: "Sample Flow"
+    flow:
+      - parallel:
+          - get:
+              url: "/parks"
+          - get:
+              url: "/config"
+      - get:
+          url: "/parks"

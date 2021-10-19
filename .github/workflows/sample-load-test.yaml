@@ -1,0 +1,54 @@
+name: Parks Load Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      rampUpDuration:
+        description: "Duration of ramp up phase"
+        default: 120
+        required: true
+      rampUpRate:
+        description: "Rate of ramp up phase"
+        default: 5
+        required: true
+      rampUpMax:
+        description: "Max rate of ramp up phase"
+        default: 50
+        required: true
+      sustainedDuration:
+        description: "Duration of sustained phase"
+        default: 600
+        required: true
+      sustainedRate:
+        description: "Rate of sustained phase"
+        default: 50
+        required: true
+
+jobs:
+  run:
+    name: Run
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          cache: "npm"
+
+      - run: npm ci --ignore-scripts
+
+      - run: npm start
+        env:
+          API_URL: ${{ secrets.API_URL }}
+          RAMP_UP_DURATION: ${{ github.event.inputs.rampUpDuration }}
+          RAMP_UP_RATE: ${{ github.event.inputs.rampUpRate }}
+          RAMP_UP_MAX: ${{ github.event.inputs.rampUpMax }}
+          SUSTAINED_DURATION: ${{ github.event.inputs.sustainedDuration }}
+          SUSTAINED_RATE: ${{ github.event.inputs.sustainedRate }}
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: reports
+          path: |
+            report.json
+            report.html
